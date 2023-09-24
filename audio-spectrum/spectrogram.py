@@ -2,10 +2,9 @@ import glob
 import time
 import matplotlib.pyplot as plt
 import librosa.display
-import IPython.display as ipd
 
 ### https://www.openslr.org/12 you can download from there
-folder_path = 'LibriSpeech/dev-clean/1462/'
+folder_path = '/dev-clean/1462/'
 
 for filename in glob.glob(f'{folder_path}/**/*.wav', recursive=True):
     speech_path = filename
