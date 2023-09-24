@@ -1,43 +1,31 @@
 import librosa
-import IPython.display as ipd
-import matplotlib.pyplot as plt
-import librosa.display
+import numpy as np
+import os
 
-audio_path = 'dev-clean/777/126732/777-126732-0002.flac'
+print("Current working directory:", os.getcwd())
 
-try:
-    x , sr = librosa.load(audio_path)
-except Exception as e:
-    print(f"An error occurred while loading the audio file: {e}")
-    exit()
+def extract_mfcc(audio_file_path, n_mfcc=13):
+    """
+    Extract MFCC features from an audio file.
 
-if x is None or sr is None:
-    print("Failed to load audio.")
-    exit()
+    Parameters:
+        audio_file_path (str): Path to the audio file.
+        n_mfcc (int): Number of MFCCs to return.
 
-print(f"Type of x: {type(x)}, Type of sr: {type(sr)}")
+    Returns:
+        np.ndarray: MFCC features.
+    """
+    # Load audio file
+    y, sr = librosa.load(audio_file_path)
 
-# Display audio
-audio = ipd.Audio(audio_path)
+    # Extract MFCC features
+    mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=n_mfcc)
 
-# Plot waveform
-plt.figure(figsize=(14, 5))
-try:
-    librosa.display.waveshow(x, sr=sr)
-except Exception as e:
-    print(f"An error occurred while plotting the waveform: {e}")
+    return mfccs
 
-plt.show()
 
-# Plot spectrogram
-X = librosa.stft(x)
-Xdb = librosa.amplitude_to_db(abs(X))
-plt.figure(figsize=(14, 5))
+# Example usage
+audio_file_path = "/dev-clean/174/50561/174-50561-0002.wav"
+mfcc_features = extract_mfcc(audio_file_path)
 
-try:
-    librosa.display.specshow(Xdb, sr=sr, x_axis='time', y_axis='hz')
-except Exception as e:
-    print(f"An error occurred while plotting the spectrogram: {e}")
-
-plt.colorbar()
-plt.show()
+print(f"MFCC features shape: {mfcc_features.shape}")
